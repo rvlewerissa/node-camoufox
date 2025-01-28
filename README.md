@@ -87,8 +87,8 @@ const server = new CamoufoxServer({
 For additional configuration options and features, please check:
 
 - [Camoufox Documentation](https://camoufox.com/)
-- [Camoufox Python Interface](https://camoufox.com/usage/)
-- [Advanced Configuration](https://camoufox.com/config/)
+- [Camoufox Python Interface](https://camoufox.com/python/)
+- [Advanced Configuration](https://camoufox.com/fingerprint/)
 
 This implementation doesnt support all Camoufox options - you can extend the configuration based on the official documentation by yourself.
 You need to update and edit `CamoufoxServer.js` and `server.py` yourself.
