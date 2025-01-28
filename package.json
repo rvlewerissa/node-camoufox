@@ -1,0 +1,35 @@
+{
+    "name": "node-camoufox",
+    "version": "1.0.0",
+    "description": "Node.js implementation for the Camoufox automation framework",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "test": "node example.js",
+        "start": "node example.js"
+    },
+    "keywords": [
+        "camoufox",
+        "automation",
+        "browser",
+        "playwright",
+        "proxy",
+        "undetectable"
+    ],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "playwright": "^1.49.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/DemonMartin/node-camoufox.git"
+    },
+    "bugs": {
+        "url": "https://github.com/DemonMartin/node-camoufox/issues"
+    },
+    "homepage": "https://github.com/DemonMartin/node-camoufox#readme",
+    "engines": {
+        "node": ">=16.0.0"
+    }
+}
