@@ -1,54 +1,70 @@
 import { firefox } from 'playwright';
+import { fileURLToPath } from 'url';
 import { CamoufoxServer } from './src/CamoufoxServer.js';
+import fs from 'fs';
+import path from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const debug = (msg) => console.log(`[${new Date().toISOString()}] ${msg}`);
 
 async function runExample() {
-    const server = new CamoufoxServer({
-        headless: false,
-        humanize: true,
-        debug: false,
-    });
+  const server = new CamoufoxServer({
+    headless: false,
+    humanize: true,
+    debug: false,
+  });
 
-    try {
-        debug('Starting server...');
-        const wsEndpoint = await server.start();
+  try {
+    debug('Starting server...');
+    const wsEndpoint = await server.start();
 
-        debug('Connecting to browser...');
-        const browser = await firefox.connect(wsEndpoint);
+    debug('Connecting to browser...');
+    const browser = await firefox.connect(wsEndpoint);
 
-        // Register browser with server for proper cleanup
-        server.setBrowser(browser);
+    server.setBrowser(browser);
 
-        const page = await browser.newPage();
+    const page = await browser.newPage();
 
-        // Navigate to a simple test page
-        await page.goto('https://example.com');
-        debug('Page loaded');
+    await page.goto('https://onlyfans.com/testingusernameonlyfans');
+    debug('Page loaded');
 
-        // Find and hover over a link
-        const link = page.getByRole('link');
-        await link.hover();
-        debug('Hovered over link');
+    const displayName = await page
+      .locator('.g-user-name')
+      .first()
+      .textContent();
+    debug(`Display Name: ${displayName}`);
 
-        // Get some page info
-        const result = {
-            title: await page.title(),
-            linkText: await link.textContent(),
-            url: page.url(),
-        };
+    const result = {
+      title: await page.title(),
+      displayName: displayName,
+      url: page.url(),
+    };
 
-        console.log('Results:', result);
-        return result;
-    } catch (error) {
-        debug(`Error: ${error.message}`);
-        throw error;
-    } finally {
-        debug('Stopping server and browser...');
-        await server.stop();
-        debug('Cleanup completed');
+    console.log('Results:', result);
+
+    const csvDir = path.join(__dirname, 'csv');
+    console.log('__dirname:', __dirname);
+    if (!fs.existsSync(csvDir)) {
+      fs.mkdirSync(csvDir);
     }
+
+    const csvFilePath = path.join(csvDir, 'result.csv');
+    const csvContent = `Title,DisplayName,URL\n"${result.title}","${result.displayName}","${result.url}"\n`;
+
+    fs.writeFileSync(csvFilePath, csvContent);
+    debug(`Results saved to ${csvFilePath}`);
+
+    return result;
+  } catch (error) {
+    debug(`Error: ${error.message}`);
+    throw error;
+  } finally {
+    debug('Stopping server and browser...');
+    await server.stop();
+    debug('Cleanup completed');
+  }
 }
 
-// Run example
 runExample().catch(console.error);
